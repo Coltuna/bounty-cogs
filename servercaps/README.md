@@ -1,0 +1,1 @@
+This is a cog used to track the server cap data.
