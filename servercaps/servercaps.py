@@ -35,13 +35,11 @@ class ServerCaps(commands.Cog):
             description="General server usage & limits",
             color=discord.Color.blurple(),
         )
-
         embed.add_field(
             name="🚀 Boost Status",
             value=(f"Tier: **{tier}**\n" f"Boosts: **{boosts}**"),
             inline=False,
         )
-
         embed.add_field(
             name="📺 Channels",
             value=(
@@ -60,7 +58,6 @@ class ServerCaps(commands.Cog):
         embed.add_field(
             name="🧵 Threads", value=f"{len(guild.threads)} / 1000", inline=True
         )
-
         embed.add_field(
             name="🖼 Stickers",
             value=(
@@ -70,7 +67,6 @@ class ServerCaps(commands.Cog):
             ),
             inline=False,
         )
-
         embed.add_field(
             name="😄 Static Emojis",
             value=(
@@ -104,6 +100,10 @@ class ServerCaps(commands.Cog):
         )
 
         embed.add_field(
+            name="📁 Categories", value=str(len(guild.categories)), inline=True
+        )
+
+        embed.add_field(
             name="💬 Text Channels", value=str(len(guild.text_channels)), inline=True
         )
 
@@ -116,98 +116,10 @@ class ServerCaps(commands.Cog):
         )
 
         embed.add_field(
-            name="📁 Categories", value=str(len(guild.categories)), inline=True
-        )
-
-        embed.add_field(name="🧵 Threads", value=str(len(guild.threads)), inline=True)
-
-        embed.add_field(
             name="📦 Total Channels", value=str(len(guild.channels)), inline=False
         )
 
         embed.set_footer(text="Maximum channels per server: 500")
-        return embed
-
-    def build_audio_embed(self, ctx: commands.Context) -> discord.Embed:
-        guild = ctx.guild
-        tier = guild.premium_tier
-
-        soundboard_slots = {0: 8, 1: 24, 2: 36, 3: 48}
-        stream_quality = {0: "720p @ 30fps", 1: "720p @ 60fps", 2: "∞", 3: "∞"}
-        audio_quality = {0: "96 kbps", 1: "128 kbps", 2: "256 kbps", 3: "384 kbps"}
-        go_live_quality = {0: "720p @ 60fps", 1: "∞", 2: "1080p @ 60fps", 3: "∞"}
-
-        embed = discord.Embed(
-            title="🎧 Audio & Streaming Limits",
-            description=f"Voice & Go Live limits for **Boost Tier {tier}**",
-            color=discord.Color.orange(),
-        )
-
-        embed.add_field(name="🔊 Audio Quality", value=audio_quality[tier], inline=True)
-
-        embed.add_field(
-            name="🎚 Soundboard Slots", value=str(soundboard_slots[tier]), inline=True
-        )
-
-        embed.add_field(
-            name="📡 Stream Quality", value=stream_quality[tier], inline=True
-        )
-
-        embed.add_field(
-            name="📺 Go Live Stream Quality", value=go_live_quality[tier], inline=True
-        )
-
-        if tier == 0:
-            embed.add_field(name="👥 Go Live Audience", value="50 members", inline=True)
-            embed.add_field(
-                name="🖥 Screenshare (No Camera)", value="50 members", inline=True
-            )
-            embed.add_field(
-                name="📹 Voice Channel Video", value="25 members", inline=True
-            )
-
-        embed.set_footer(
-            text="Audio limits are tier-based (Discord does not expose dynamic overrides)"
-        )
-
-        return embed
-
-    def build_server_overview_embed(self, ctx):
-        tier = ctx.guild.premium_tier
-
-        upload = {
-            0: "10 MB",
-            1: "N/A",
-            2: "50 MB",
-            3: "100 MB",
-        }
-
-        embed = discord.Embed(
-            title="🧩 Server Overview",
-            description=f"Boost Tier **{tier}**",
-            color=discord.Color.teal(),
-        )
-
-        embed.add_field(name="📤 Upload Limit", value=upload[tier], inline=True)
-        embed.add_field(
-            name="🔗 Vanity URL",
-            value="Yes (25 characters)" if tier == 3 else "No",
-            inline=True,
-        )
-        embed.add_field(
-            name="🖼 Animated Server Icon",
-            value="Yes" if tier >= 1 else "No",
-            inline=True,
-        )
-
-        banner = ["No", "No", "Static", "Animated"][tier]
-        embed.add_field(name="🎨 Server Banner", value=banner, inline=True)
-
-        embed.add_field(
-            name="🎭 Custom Role Icons", value="Yes" if tier >= 2 else "No", inline=True
-        )
-        embed.add_field(name="👥 Total Member Count", value="25 million", inline=False)
-
         return embed
 
     def build_stage_embed(self, ctx):
@@ -242,10 +154,81 @@ class ServerCaps(commands.Cog):
 
         return embed
 
+    def build_server_and_audio_embed(self, ctx: commands.Context) -> discord.Embed:
+        guild = ctx.guild
+        tier = guild.premium_tier
+
+        upload = {
+            0: "10 MB",
+            1: "N/A",
+            2: "50 MB",
+            3: "100 MB",
+        }
+
+        soundboard_slots = {0: 8, 1: 24, 2: 36, 3: 48}
+        stream_quality = {0: "720p @ 30fps", 1: "720p @ 60fps", 2: "∞", 3: "∞"}
+        audio_quality = {0: "96 kbps", 1: "128 kbps", 2: "256 kbps", 3: "384 kbps"}
+        go_live_quality = {0: "720p @ 60fps", 1: "∞", 2: "1080p @ 60fps", 3: "∞"}
+
+        embed = discord.Embed(
+            title="🧩 Server Overview",
+            description=f"Boost Tier **{tier}** — server features and voice limits",
+            color=discord.Color.teal(),
+        )
+
+        embed.add_field(name="📤 Upload Limit", value=upload[tier], inline=True)
+        embed.add_field(
+            name="🔗 Vanity URL",
+            value="Yes (25 characters)" if tier == 3 else "No",
+            inline=True,
+        )
+        embed.add_field(
+            name="🖼 Animated Server Icon",
+            value="Yes" if tier >= 1 else "No",
+            inline=True,
+        )
+
+        banner = ["No", "No", "Static", "Animated"][tier]
+        embed.add_field(name="🎨 Server Banner", value=banner, inline=True)
+        embed.add_field(
+            name="🎭 Custom Role Icons", value="Yes" if tier >= 2 else "No", inline=True
+        )
+
+        embed.add_field(name="\u200b", value="\u200b", inline=False)
+
+        # ── Audio & Streaming ──
+        embed.add_field(name="🔊 Audio Quality", value=audio_quality[tier], inline=True)
+        embed.add_field(
+            name="🎚 Soundboard Slots", value=str(soundboard_slots[tier]), inline=True
+        )
+        embed.add_field(
+            name="📡 Stream Quality", value=stream_quality[tier], inline=True
+        )
+        embed.add_field(
+            name="📺 Go Live Stream Quality", value=go_live_quality[tier], inline=True
+        )
+
+        if tier == 0:
+            embed.add_field(name="👥 Go Live Audience", value="50 members", inline=True)
+            embed.add_field(
+                name="🖥 Screenshare (No Camera)", value="50 members", inline=True
+            )
+            embed.add_field(
+                name="📹 Voice Channel Video", value="25 members", inline=True
+            )
+
+        embed.set_footer(
+            text="Audio limits are tier-based • Some limits are fixed by Discord"
+        )
+
+        return embed
+
     def build_thread_embed(self, ctx):
         embed = discord.Embed(title="🧵 Thread Limits", color=discord.Color.gold())
 
-        embed.add_field(name="🧵 Threads", value="N/A", inline=True)
+        embed.add_field(
+            name="🧵 Threads", value=str(len(ctx.guild.threads)), inline=True
+        )
         embed.add_field(name="👥 Members per Thread", value="1000", inline=True)
         embed.add_field(name="🎭 Roles Mentioned (Private)", value="10", inline=True)
 
