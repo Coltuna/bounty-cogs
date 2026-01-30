@@ -1,0 +1,30 @@
+{
+    // -------- Editor behavior --------
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "always"
+    },
+    // -------- Python formatting & linting --------
+    "python.formatting.provider": "black",
+    "python.linting.enabled": true,
+    "python.linting.ruffEnabled": true,
+    "python.linting.ruffArgs": [
+        "--select=I"
+    ],
+    // -------- Language server --------
+    "python.languageServer": "Pylance",
+    "python.analysis.typeCheckingMode": "off",
+    "python.analysis.typeEvaluation.strictParameterNoneValue": false,
+    // -------- Python environments --------
+    "python-envs.pythonProjects": [],
+    // -------- Python import resolution (Red-DiscordBot) --------
+    "python.analysis.extraPaths": [
+        "D:/repos/Red-DiscordBot",
+        "./",
+        "${workspaceFolder}/dankutils",
+    ],
+    // -------- Terminal environment --------
+    "terminal.integrated.env.linux": {},
+    "terminal.integrated.env.windows": {},
+    "python-envs.defaultEnvManager": "ms-python.python:venv"
+}

@@ -42,14 +42,33 @@ class ServerCaps(commands.Cog):
             inline=False,
         )
 
+        embed.add_field(
+            name="📺 Channels",
+            value=(
+                f"**{len(guild.channels)} / 500**\n"
+                f"📁 Categories: **{len(guild.categories)}**\n"
+                f"💬 Text: **{len(guild.text_channels)}**\n"
+                f"🗂 Forums: **{len(guild.forums)}**\n"
+                f"🔊 Voice: **{len(guild.voice_channels)}**\n"
+                f"🎙 Stage: **{len(guild.stage_channels)}**"
+            ),
+            inline=False,
+        )
+
         embed.add_field(name="🎭 Roles", value=f"{len(guild.roles)} / 250", inline=True)
 
         embed.add_field(
-            name="📺 Channels", value=f"{len(guild.channels)} / 500", inline=True
+            name="🧵 Threads", value=f"{len(guild.threads)} / 1000", inline=True
         )
 
         embed.add_field(
-            name="🧵 Threads", value=f"{len(guild.threads)} / 1000", inline=True
+            name="🖼 Stickers",
+            value=(
+                f"Used: **{len(guild.stickers)}**\n"
+                f"Total: **{sticker_limits[tier]}**\n"
+                f"Left: **{sticker_limits[tier] - len(guild.stickers)}**"
+            ),
+            inline=False,
         )
 
         embed.add_field(
@@ -68,16 +87,6 @@ class ServerCaps(commands.Cog):
                 f"Used: **{animated_emojis}**\n"
                 f"Limit: **{emoji_limits[tier]}**\n"
                 f"Left: **{emoji_limits[tier] - animated_emojis}**"
-            ),
-            inline=True,
-        )
-
-        embed.add_field(
-            name="🖼 Stickers",
-            value=(
-                f"Used: **{len(guild.stickers)}**\n"
-                f"Total: **{sticker_limits[tier]}**\n"
-                f"Left: **{sticker_limits[tier] - len(guild.stickers)}**"
             ),
             inline=True,
         )

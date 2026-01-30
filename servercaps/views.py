@@ -1,38 +1,19 @@
 import discord
-from discord.ui import Select, View
+from discord.ui import View, Button
 
 
-class CapsSelect(Select):
-    def __init__(self, cog, ctx):
+class CapsButton(Button):
+    def __init__(self, *, label, emoji, style, value, cog, ctx):
+        super().__init__(label=label, emoji=emoji, style=style)
+        self.value = value
         self.cog = cog
         self.ctx = ctx
-
-        options = [
-            discord.SelectOption(label="Overview", emoji="📊", value="overview"),
-            discord.SelectOption(label="Server Overview", emoji="🧩", value="server"),
-            discord.SelectOption(label="Channels", emoji="📺", value="channels"),
-            discord.SelectOption(
-                label="Channel Categories", emoji="📁", value="categories"
-            ),
-            discord.SelectOption(label="Threads", emoji="🧵", value="threads"),
-            discord.SelectOption(label="Stage Channels", emoji="🎙", value="stages"),
-            discord.SelectOption(label="Audio & Streaming", emoji="🎧", value="audio"),
-        ]
-
-        super().__init__(
-            placeholder="Select a section",
-            options=options,
-            min_values=1,
-            max_values=1,
-        )
 
     async def callback(self, interaction: discord.Interaction):
         if interaction.user != self.ctx.author:
             return await interaction.response.send_message(
-                "❌ You can't use this menu.", ephemeral=True
+                "❌ You can't use these buttons.", ephemeral=True
             )
-
-        value = self.values[0]
 
         mapping = {
             "overview": self.cog.build_overview_embed,
@@ -44,18 +25,40 @@ class CapsSelect(Select):
             "audio": self.cog.build_audio_embed,
         }
 
-        embed = mapping[value](self.ctx)
+        embed = mapping[self.value](self.ctx)
         await interaction.response.edit_message(embed=embed, view=self.view)
 
 
 class CapsView(View):
     def __init__(self, cog, ctx):
         super().__init__(timeout=120)
-        self.add_item(CapsSelect(cog, ctx))
+
+        buttons = [
+            ("Overview", "📊", discord.ButtonStyle.primary, "overview"),
+            ("Server", "🧩", discord.ButtonStyle.secondary, "server"),
+            ("Channels", "📺", discord.ButtonStyle.secondary, "channels"),
+            ("Categories", "📁", discord.ButtonStyle.secondary, "categories"),
+            ("Threads", "🧵", discord.ButtonStyle.secondary, "threads"),
+            ("Stages", "🎙", discord.ButtonStyle.secondary, "stages"),
+            ("Audio", "🎧", discord.ButtonStyle.secondary, "audio"),
+        ]
+
+        for label, emoji, style, value in buttons:
+            self.add_item(
+                CapsButton(
+                    label=label,
+                    emoji=emoji,
+                    style=style,
+                    value=value,
+                    cog=cog,
+                    ctx=ctx,
+                )
+            )
 
     async def on_timeout(self):
         for item in self.children:
             item.disabled = True
+
         if self.message:
             try:
                 await self.message.edit(view=self)
