@@ -191,7 +191,7 @@ class ServerCaps(commands.Cog):
         embed.add_field(name="📤 Upload Limit", value=upload[tier], inline=True)
         embed.add_field(
             name="🔗 Vanity URL",
-            value="25 characters" if tier == 3 else "No",
+            value="Yes (25 characters)" if tier == 3 else "No",
             inline=True,
         )
         embed.add_field(
@@ -205,11 +205,6 @@ class ServerCaps(commands.Cog):
 
         embed.add_field(
             name="🎭 Custom Role Icons", value="Yes" if tier >= 2 else "No", inline=True
-        )
-        embed.add_field(
-            name="🔗 Custom Invite Link",
-            value="Yes" if tier == 3 else "No",
-            inline=True,
         )
         embed.add_field(name="👥 Total Member Count", value="25 million", inline=False)
 
