@@ -204,6 +204,8 @@ class ServerCaps(commands.Cog):
             description=f"Boost Tier **{tier}** — server features and voice limits",
             color=discord.Color.teal(),
         )
+        if guild.icon:
+            embed.set_thumbnail(url=guild.icon.url)
 
         embed.add_field(name="📤 Upload Limit", value=upload[tier], inline=True)
         embed.add_field(
