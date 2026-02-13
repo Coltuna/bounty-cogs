@@ -179,15 +179,25 @@ class ServerCaps(commands.Cog):
 
         upload = {
             0: "10 MB",
-            1: "N/A",
+            1: "10 MB",
             2: "50 MB",
             3: "100 MB",
         }
 
         soundboard_slots = {0: 8, 1: 24, 2: 36, 3: 48}
-        stream_quality = {0: "720p @ 30fps", 1: "720p @ 60fps", 2: "∞", 3: "∞"}
+        stream_quality = {
+            0: "720p @ 30fps",
+            1: "720p @ 60fps",
+            2: "1080p @ 60fps",
+            3: "1080p @ 60fps",
+        }
         audio_quality = {0: "96 kbps", 1: "128 kbps", 2: "256 kbps", 3: "384 kbps"}
-        go_live_quality = {0: "720p @ 60fps", 1: "∞", 2: "1080p @ 60fps", 3: "∞"}
+        go_live_quality = {
+            0: "720p @ 60fps",
+            1: "720p @ 60fps",
+            2: "1080p @ 60fps",
+            3: "1080p @ 60fps",
+        }
 
         embed = discord.Embed(
             title="🧩 Server Overview",
@@ -215,7 +225,6 @@ class ServerCaps(commands.Cog):
 
         embed.add_field(name="\u200b", value="\u200b", inline=False)
 
-        # ── Audio & Streaming ──
         embed.add_field(name="🔊 Audio Quality", value=audio_quality[tier], inline=True)
         embed.add_field(
             name="🎚 Soundboard Slots",
@@ -265,5 +274,19 @@ class ServerCaps(commands.Cog):
 
         embed.add_field(name="📺 Total Channels (All Types)", value="500", inline=True)
         embed.add_field(name="📁 Channels per Category", value="50", inline=True)
+
+        return embed
+
+    def build_icon_embed(self, ctx: commands.Context) -> discord.Embed:
+        guild = ctx.guild
+        embed = discord.Embed(
+            title=f"🖼 {guild.name}'s Icon",
+            color=discord.Color.blurple(),
+        )
+
+        if guild.icon:
+            embed.set_image(url=guild.icon.url)
+        else:
+            embed.description = "No server icon set."
 
         return embed

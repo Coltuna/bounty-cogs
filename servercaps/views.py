@@ -22,6 +22,7 @@ class CapsButton(Button):
             "categories": self.cog.build_category_embed,
             "threads": self.cog.build_thread_embed,
             "stages": self.cog.build_stage_embed,
+            "icon": self.cog.build_icon_embed,
         }
 
         embed = mapping[self.value](self.ctx)
@@ -39,6 +40,7 @@ class CapsView(View):
             ("Categories", "📁", discord.ButtonStyle.secondary, "categories"),
             ("Threads", "🧵", discord.ButtonStyle.secondary, "threads"),
             ("Stages", "🎙", discord.ButtonStyle.secondary, "stages"),
+            ("Server Icon", "🖼", discord.ButtonStyle.secondary, "icon"),
         ]
 
         for label, emoji, style, value in buttons:
