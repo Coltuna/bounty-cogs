@@ -292,3 +292,17 @@ class ServerCaps(commands.Cog):
             embed.description = "No server icon set."
 
         return embed
+
+    def build_banner_embed(self, ctx: commands.Context) -> discord.Embed:
+        guild = ctx.guild
+        embed = discord.Embed(
+            title=f"🎨 {guild.name}'s Banner",
+            color=discord.Color.blurple(),
+        )
+
+        if guild.banner:
+            embed.set_image(url=guild.banner.url)
+        else:
+            embed.description = "No server banner set."
+
+        return embed
